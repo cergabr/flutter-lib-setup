@@ -1,0 +1,14 @@
+# Enable following of sourced files
+external-sources=true
+
+# Specify search path for sourced files
+source-path=lib
+
+# Specify shell dialect
+shell=bash
+
+# Enable shellcheck's built-in checks
+builtin=true
+
+# Enable shellcheck's built-in checks
+builtin=true

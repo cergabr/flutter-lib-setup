@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# shellcheck disable=SC1091
+. "$(dirname "$0")/_/husky.sh"
+
+# Run the dart script for commit-msg
+dart "$(dirname "$0")/git_hooks.dart" commit-msg "$1"

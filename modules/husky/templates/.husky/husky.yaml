@@ -1,0 +1,7 @@
+hooks:
+  pre-commit:
+    - script: pre-commit
+      args: []
+  commit-msg:
+    - command: dart
+      args: [git_hooks.dart, commit-msg, $HUSKY_GIT_PARAMS] 

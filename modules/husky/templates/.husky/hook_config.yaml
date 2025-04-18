@@ -1,0 +1,5 @@
+# Git Hook Configuration
+hooks:
+  # Set to true to enable checks
+  analyze: false
+  format: false

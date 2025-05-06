@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source common utilities
-source "$(dirname "$0")/common.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../common.sh"
 
 # Function to validate environment names
 validate_env_name() {

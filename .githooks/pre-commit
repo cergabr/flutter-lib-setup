@@ -1,0 +1,28 @@
+#!/bin/bash
+
+modules_dir="modules"
+
+# Find all modules with a templates directory
+modules_with_templates=()
+while IFS= read -r -d '' dir; do
+    module_name=$(basename "$(dirname "$dir")")
+    modules_with_templates+=("$module_name")
+done < <(find "$modules_dir" -type d -name templates -print0)
+
+# For each such module, check for staged changes in its templates dir (excluding *.auto.sh)
+for module in "${modules_with_templates[@]}"; do
+    template_dir="$modules_dir/$module/templates"
+    # Find staged files in this template dir, excluding *.auto.sh
+    changed_files=$(git diff --cached --name-only --diff-filter=ACM | grep "^$template_dir/" | grep -v '\.auto\.sh$')
+    if [ -n "$changed_files" ]; then
+        echo "Detected changes in template files for module: $module"
+        echo "$changed_files"
+        echo "Regenerating hash file with: csum $module"
+        csum "$module"
+        # Add the updated hash file to the commit (auto-detect the hash file name)
+        hash_file=$(find "$template_dir" -maxdepth 1 -name '*_hashes.auto.sh' | head -n1)
+        if [ -n "$hash_file" ]; then
+            git add "$hash_file"
+        fi
+    fi
+done

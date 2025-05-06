@@ -8,7 +8,7 @@
 
 #shellcheck disable=SC2034
 declare -A HUSKY_FILE_HASHES=(
-    ["husky_install.sh"]="2f4b2791293712b90d0914c7a9ecfcacc3c27d828d5ae182a228db260d778d68"
+    ["husky_install.sh"]="4d48c3a0109a58bb11fc7a39cfdf6978a54409bf5518a46ffa364121202cdb8f"
     ["husky.yaml"]="baeb5f3147ecb38ca94a26d5d36abfe1f0f1870d240c3da45aa962d275c8c42c"
     ["hook_config.yaml"]="7949e6051a0f7c8a95ddf770e3d5407c13a85275ca6ebe6600aba0ddb9168fb7"
     ["commit-msg"]="f2e06fd1af43827af8c9524433dd9d91ad875bc49dc14ab3ee263d52c7189915"

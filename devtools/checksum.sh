@@ -76,7 +76,7 @@ is_valid_module() {
 # Main script logic
 if [ $# -eq 0 ]; then
     echo "Error: No argument provided"
-    echo "Usage: $0 <module_name> or $0 <full_path>"
+    echo "Usage: <module_name> or <full_path>"a
     exit 1
 fi
 

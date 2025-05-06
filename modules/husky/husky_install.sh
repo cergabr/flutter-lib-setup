@@ -68,11 +68,13 @@ husky::install() {
 husky::_copy_templates() {
     local target_dir="$1"
     
-    # Copy contents of the template directory
+    echo "Copying from $TEMPLATES_DIR to $target_dir/.husky/"
+    ls -l "$TEMPLATES_DIR"
     if ! rsync -a "$TEMPLATES_DIR/" "$target_dir/.husky/"; then
          colors::print_error "Failed to copy template files."
          return 1
     fi
+    ls -l "$target_dir/.husky/"
 
     # Verify hashes after copying
     for rel_path in "${!HUSKY_FILE_HASHES[@]}"; do

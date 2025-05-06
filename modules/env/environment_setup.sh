@@ -64,9 +64,9 @@ environment::setup() {
         for folder in "${env_folder_names[@]}"; do
             local candidate="${dir}/${folder}"
             if [ -d "$candidate" ] && [ "$(ls -A "$candidate" 2>/dev/null)" ]; then
-                colors::print_error "Found non-empty environment folder: $candidate"
-                colors::print_error "Please clean up or rename this folder before running environment setup."
-                return 1
+                colors::print_warning "Found non-empty environment folder: $candidate"
+                colors::print_warning "Please clean up or rename this folder before running environment setup."
+                return 0
             fi
         done
     done

@@ -12,14 +12,14 @@ source "${HUSKY_MODULE_DIR}/templates/templates_hashes.auto.sh"
 husky::_activate_husky() {
     colors::print_info "Attempting to activate Husky..."
     # Check if husky is runnable via dart run
-    if ! dart run husky --version > /dev/null 2>&1; then
+    if ! dart run husky > /dev/null 2>&1; then
         colors::print_warning "Husky command not found via 'dart run'. Attempting global activation..."
         if ! dart pub global activate husky; then
             colors::print_error "Failed to activate Husky globally. Please install it manually ('dart pub global activate husky') and ensure Dart SDK is in your PATH."
             return 1
         fi
         # Re-check after activation
-        if ! dart run husky --version > /dev/null 2>&1; then
+        if ! dart run husky > /dev/null 2>&1; then
              colors::print_error "Husky activated but still not runnable via 'dart run'. Check your Dart setup."
              return 1
         fi
@@ -69,12 +69,10 @@ husky::_copy_templates() {
     local target_dir="$1"
     
     echo "Copying from $TEMPLATES_DIR to $target_dir/.husky/"
-    ls -l "$TEMPLATES_DIR"
     if ! rsync -a "$TEMPLATES_DIR/" "$target_dir/.husky/"; then
          colors::print_error "Failed to copy template files."
          return 1
     fi
-    ls -l "$target_dir/.husky/"
 
     # Verify hashes after copying
     for rel_path in "${!HUSKY_FILE_HASHES[@]}"; do

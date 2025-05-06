@@ -79,7 +79,7 @@ environment::setup() {
     if [ "${NON_INTERACTIVE:-}" = "1" ]; then
         env_names="${ENV_NAMES:-}"
         if [ -z "$env_names" ]; then
-            colors::print_warning "No environment names provided in non-interactive mode. Skipping."
+            colors::print_warning "No environment names provided in non-interactive mode. The script will use the default names: production, staging, develop, local."
             return 0
         fi
     else
@@ -98,7 +98,7 @@ environment::setup() {
     local i=1
     local name
     if [ -z "$env_names" ]; then
-        env_names="production develop"
+        env_names="production staging develop local"
     fi
 
     for name in $env_names; do

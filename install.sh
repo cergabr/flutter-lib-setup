@@ -5,6 +5,10 @@ REPO_URL="https://github.com/cergabr/flutter-lib-setup.git"
 BRANCH="master" # Change to "main" if your default branch is main
 TMP_DIR="$(mktemp -d -t flutter-lib-setup-XXXXXXXXXX)"
 
+# Set default values if not provided
+NON_INTERACTIVE="${NON_INTERACTIVE:-1}"
+ENV_NAMES="${ENV_NAMES:-production staging develop local}"
+
 cleanup() {
   rm -rf "$TMP_DIR"
 }
@@ -16,6 +20,6 @@ git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TMP_DIR"
 cd "$TMP_DIR"
 
 echo "Running setup script from cloned repository..."
-bash setup.sh "$@"
+NON_INTERACTIVE="$NON_INTERACTIVE" ENV_NAMES="$ENV_NAMES" bash setup.sh "$@"
 
 echo "Cleaning up temporary files..."

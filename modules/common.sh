@@ -14,7 +14,7 @@ validate_number() {
     if [[ "$input" =~ ^[0-9]+$ ]] && [ "$input" -gt 0 ]; then
         return 0
     else
-        print_error "Please enter a valid number greater than 0"
+        colors::print_error "Please enter a valid number greater than 0"
         return 1
     fi
 }
@@ -24,7 +24,7 @@ ensure_directory_exists() {
     local dir=$1
     if [ ! -d "$dir" ]; then
         mkdir -p "$dir"
-        print_success "Created directory: $dir"
+        colors::print_success "Created directory: $dir"
     fi
 }
 
@@ -51,7 +51,7 @@ get_validated_input() {
             break
         fi
         if [ -n "$error_message" ]; then
-            print_error "$error_message"
+            colors::print_error "$error_message"
         fi
     done
 } 

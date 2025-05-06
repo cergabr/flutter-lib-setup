@@ -60,9 +60,6 @@ environment::setup() {
     # Check for existing non-empty environment folders in project root or lib
     local env_folder_names=("env" "envs" "environment" "environments")
     local search_dirs=("." "./lib")
-    pwd
-    ls -ld environments
-    ls -A environments
     for dir in "${search_dirs[@]}"; do
         for folder in "${env_folder_names[@]}"; do
             local candidate="${dir}/${folder}"

@@ -44,14 +44,18 @@ environment::setup() {
 
     # Ask user if they want to install environments
     local install_envs
-    while true; do
-        read -r -p "Do you want to install environments? (y/n): " install_envs
-        case "$install_envs" in
-            [Yy]) break ;;
-            [Nn]) colors::print_info "Skipping environment installation."; return 0 ;;
-            *) colors::print_warning "Please answer y or n." ;;
-        esac
-    done
+    if [ "${NON_INTERACTIVE:-}" = "1" ]; then
+        install_envs="y"
+    else
+        while true; do
+            read -r -p "Do you want to install environments? (y/n): " install_envs
+            case "$install_envs" in
+                [Yy]) break ;;
+                [Nn]) colors::print_info "Skipping environment installation."; return 0 ;;
+                *) colors::print_warning "Please answer y or n." ;;
+            esac
+        done
+    fi
 
     # Check for existing non-empty environment folders in project root or lib
     local env_folder_names=("env" "envs" "environment" "environments")
@@ -72,20 +76,31 @@ environment::setup() {
     
     # Ask for environment names in a single prompt
     local env_names
-    while true; do
-        read -r -p "Enter environment names (space-separated, e.g., env1 env2): " env_names
-        # Remove leading/trailing whitespace
-        env_names=$(echo "$env_names" | xargs)
+    if [ "${NON_INTERACTIVE:-}" = "1" ]; then
+        env_names="${ENV_NAMES:-}"
         if [ -z "$env_names" ]; then
-            colors::print_warning "Please enter at least one environment name."
-            continue
+            colors::print_warning "No environment names provided in non-interactive mode. Skipping."
+            return 0
         fi
-        break
-    done
+    else
+        while true; do
+            read -r -p "Enter environment names (space-separated, e.g., env1 env2): " env_names
+            env_names=$(echo "$env_names" | xargs)
+            if [ -z "$env_names" ]; then
+                colors::print_warning "Please enter at least one environment name."
+                continue
+            fi
+            break
+        done
+    fi
     
     # Split names and process
     local i=1
     local name
+    if [ -z "$env_names" ]; then
+        env_names="production develop"
+    fi
+
     for name in $env_names; do
         colors::print_info "[$i] Processing environment: $name"
         if ! _validate_name "$name"; then

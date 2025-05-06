@@ -41,27 +41,64 @@ _check_exists() {
 # Main environment setup function
 environment::setup() {
     colors::print_info "Starting environment setup..."
+
+    # Ask user if they want to install environments
+    local install_envs
+    while true; do
+        read -r -p "Do you want to install environments? (y/n): " install_envs
+        case "$install_envs" in
+            [Yy]) break ;;
+            [Nn]) colors::print_info "Skipping environment installation."; return 0 ;;
+            *) colors::print_warning "Please answer y or n." ;;
+        esac
+    done
+
+    # Check for existing non-empty environment folders in project root or lib
+    local env_folder_names=("env" "envs" "environment" "environments")
+    local search_dirs=("." "./lib")
+    for dir in "${search_dirs[@]}"; do
+        for folder in "${env_folder_names[@]}"; do
+            local candidate="${dir}/${folder}"
+            if [ -d "$candidate" ] && [ "$(ls -A "$candidate" 2>/dev/null)" ]; then
+                colors::print_error "Found non-empty environment folder: $candidate"
+                colors::print_error "Please clean up or rename this folder before running environment setup."
+                return 1
+            fi
+        done
+    done
     
     # Create environments directory if it doesn't exist
     ensure_directory_exists "environments"
     
-    # Get number of environments to create
-    local num_envs
-    num_envs=$(get_validated_input "How many environments do you want to create? " validate_number)
+    # Ask for environment names in a single prompt
+    local env_names
+    while true; do
+        read -r -p "Enter environment names (space-separated, e.g., env1 env2): " env_names
+        # Remove leading/trailing whitespace
+        env_names=$(echo "$env_names" | xargs)
+        if [ -z "$env_names" ]; then
+            colors::print_warning "Please enter at least one environment name."
+            continue
+        fi
+        break
+    done
     
-    # Create environments
-    for ((i=1; i<=num_envs; i++)); do
-        while true; do
-            local env_name
-            env_name=$(get_validated_input "Enter name for environment $i: " _validate_name)
-            
-            if _check_exists "$env_name"; then
-                # Create environment file
-                echo "{}" > "environments/${env_name}.json"
-                colors::print_success "Created environment: ${env_name}.json"
-                break
-            fi
-        done
+    # Split names and process
+    local i=1
+    local name
+    for name in $env_names; do
+        colors::print_info "[$i] Processing environment: $name"
+        if ! _validate_name "$name"; then
+            colors::print_error "Invalid environment name: $name. Skipping."
+            continue
+        fi
+        if _check_exists "$name"; then
+            colors::print_error "Environment '$name' already exists. Skipping."
+            continue
+        fi
+        echo "{}" > "environments/${name}.json"
+        colors::print_success "Created environment: ${name}.json"
+        i=$((i+1))
     done
     
     # List all created environments

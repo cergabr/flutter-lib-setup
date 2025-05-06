@@ -11,7 +11,7 @@ source "$SCRIPT_DIR/utils/validation.sh"
 
 # Source modules
 source "$SCRIPT_DIR/modules/husky/husky_install.sh"
-source "$SCRIPT_DIR/modules/environment/environment_setup.sh"
+source "$SCRIPT_DIR/modules/env/environment_setup.sh"
 
 # Error handling
 set -e
@@ -24,6 +24,6 @@ colors::print_info "Starting installation process..."
 environment::setup
 
 # Install modules
-husky::install
+husky::install "$@"
 
 colors::print_success "Installation completed successfully!" 

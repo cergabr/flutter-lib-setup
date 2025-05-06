@@ -60,6 +60,9 @@ environment::setup() {
     # Check for existing non-empty environment folders in project root or lib
     local env_folder_names=("env" "envs" "environment" "environments")
     local search_dirs=("." "./lib")
+    pwd
+    ls -ld environments
+    ls -A environments
     for dir in "${search_dirs[@]}"; do
         for folder in "${env_folder_names[@]}"; do
             local candidate="${dir}/${folder}"
@@ -105,20 +108,18 @@ environment::setup() {
         colors::print_info "[$i] Processing environment: $name"
         if ! _validate_name "$name"; then
             colors::print_error "Invalid environment name: $name. Skipping."
-            continue
+        elif _check_exists "$name"; then
+            colors::print_warning "Environment '$name' already exists. Skipping."
+        else
+            echo "{}" > "environments/${name}.json"
+            colors::print_success "Created environment: ${name}.json"
         fi
-        if _check_exists "$name"; then
-            colors::print_error "Environment '$name' already exists. Skipping."
-            continue
-        fi
-        echo "{}" > "environments/${name}.json"
-        colors::print_success "Created environment: ${name}.json"
         i=$((i+1))
     done
     
     # List all created environments
     colors::print_info "\nCreated environments:"
-    find environments -name "*.json" -type f -printf "%f " | sed 's/\.json//g'
+    find environments -name "*.json" -type f -print0 | xargs -0 -n1 basename | sed 's/\.json$//'
     
     colors::print_success "\nEnvironment setup completed successfully!"
 } 

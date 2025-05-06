@@ -1,29 +1,21 @@
 #!/bin/bash
+set -euo pipefail
 
-# Get the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+REPO_URL="https://github.com/cergabr/flutter-lib-setup.git"
+BRANCH="master" # Change to "main" if your default branch is main
+TMP_DIR="$(mktemp -d -t flutter-lib-setup-XXXXXXXXXX)"
 
-# Source utilities
-source "$SCRIPT_DIR/utils/colors.sh"
-source "$SCRIPT_DIR/utils/error.sh"
-source "$SCRIPT_DIR/utils/file.sh"
-source "$SCRIPT_DIR/utils/validation.sh"
+cleanup() {
+  rm -rf "$TMP_DIR"
+}
+trap cleanup EXIT
 
-# Source modules
-source "$SCRIPT_DIR/modules/husky/husky_install.sh"
-source "$SCRIPT_DIR/modules/environment/environment_setup.sh"
+echo "Cloning $REPO_URL (branch: $BRANCH) to temporary directory..."
+git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TMP_DIR"
 
-# Error handling
-set -e
-trap 'error::handle_error $? $LINENO $BASH_LINENO "$BASH_COMMAND" $(printf "::%s" ${FUNCNAME[@]:-})' ERR
+cd "$TMP_DIR"
 
-# Main installation process
-colors::print_info "Starting installation process..."
+echo "Running setup script from cloned repository..."
+bash setup.sh "$@"
 
-# Setup environments
-environment::setup
-
-# Install modules
-husky::install
-
-colors::print_success "Installation completed successfully!" 
+echo "Cleaning up temporary files..."

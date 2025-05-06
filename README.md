@@ -4,22 +4,28 @@ This script helps you set up environment configuration files for your project.
 
 ## Installation
 
-## Quick Install
+### Quick Install
+
+This command downloads a lightweight bootstrapper script, which clones the repository to a temporary directory and runs the full setup automatically:
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your-repo/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/cergabr/flutter-lib-setup/master/install.sh | bash
 ```
 
-## Manual Install (Recommended)
+- **No dependencies or files are left behind in your project directory.**
+- **All setup logic and dependencies are managed from the cloned repository.**
+
+### Manual Install (Recommended for advanced users)
+
+Clone the repository and run the main setup script directly:
+
 ```bash
-# Download the script
-curl -fsSL https://raw.githubusercontent.com/your-repo/main/install.sh -o install.sh
-
-# Verify SHA256 checksum
-echo "expected-hash-here install.sh" | sha256sum -c -
-
-# Run the installation
-bash install.sh
+git clone https://github.com/cergabr/flutter-lib-setup.git
+cd flutter-lib-setup
+bash setup.sh
 ```
+
+- This approach allows you to inspect or modify the setup scripts before running them.
 
 ## Features
 
@@ -35,14 +41,17 @@ bash install.sh
 ## Example Usage
 
 ```bash
-$ curl -s https://raw.githubusercontent.com/your-org/your-repo/main/install.sh | bash
-Starting environment setup...
+$ curl -fsSL https://raw.githubusercontent.com/cergabr/flutter-lib-setup/master/install.sh | bash
+Cloning https://github.com/cergabr/flutter-lib-setup.git (branch: master) to temporary directory...
+Running setup script from cloned repository...
+Starting installation process...
 How many environments do you want to create? 2
 Enter name for environment 1: development
 Enter name for environment 2: production
 
 Created environments: development.json production.json
-Setup completed successfully!
+Installation completed successfully!
+Cleaning up temporary files...
 ```
 
 ## Environment Files
@@ -65,9 +74,10 @@ environments/
 ## File Checksums
 
 ### Installation Scripts
-| File | SHA256 |
-|------|---------|
-| install.sh | `hash_value_here` |
+| File      | SHA256           |
+|-----------|------------------|
+| install.sh| `hash_value_here`|
+| setup.sh  | `hash_value_here`|
 
 ### Husky Templates
 | File | SHA256 |

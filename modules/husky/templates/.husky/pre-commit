@@ -10,7 +10,7 @@ YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Read configuration
-CONFIG_FILE="$(git rev-parse --show-toplevel)/hook_config.yaml"
+CONFIG_FILE="$(git rev-parse --show-toplevel)/.husky/hook_config.yaml"
 
 # Function to read config value
 read_config() {

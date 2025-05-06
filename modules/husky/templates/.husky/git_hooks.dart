@@ -58,7 +58,7 @@ bool runPreCommitChecks() {
   print('Running pre-commit checks...');
   
   // Read configuration from YAML file
-  final configFile = File('hook_config.yaml');
+  final configFile = File('.husky/hook_config.yaml');
   bool analyzeEnabled = false;
   bool formatEnabled = false;
 

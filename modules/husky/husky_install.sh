@@ -56,9 +56,6 @@ husky::install() {
     # Set permissions AFTER copying templates
     husky::_set_permissions "$target_dir"
 
-    # Compatibility copies to project root
-    husky::_compatibility_copies "$target_dir"
-
     # Verify installation (includes checking files and hooks path)
     husky::_verify_installation "$target_dir" || return 1
 
@@ -94,24 +91,6 @@ husky::_copy_templates() {
     
     colors::print_info "Template files copied and verified."
     return 0
-}
-
-husky::_compatibility_copies() {
-    local target_dir="$1"
-    local files_to_copy=("husky.yaml" "hook_config.yaml")
-
-    for filename in "${files_to_copy[@]}"; do
-        local source_file="$target_dir/.husky/$filename"
-        local dest_file="$target_dir/$filename"
-
-        if [ -f "$source_file" ] && [ ! -f "$dest_file" ]; then
-            if cp "$source_file" "$dest_file"; then
-                colors::print_info "Copied $filename to project root for compatibility."
-            else
-                colors::print_warning "Failed to copy $filename to project root."
-            fi
-        fi
-    done
 }
 
 husky::_set_permissions() {

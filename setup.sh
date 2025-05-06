@@ -20,6 +20,9 @@ trap 'error::handle_error $? $LINENO $BASH_LINENO "$BASH_COMMAND" $(printf "::%s
 # Main installation process
 colors::print_info "Starting installation process..."
 
+# Flutter project check
+validation::check_flutter_project_root || return 1
+
 # Setup environments
 environment::setup
 

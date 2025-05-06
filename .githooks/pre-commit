@@ -23,6 +23,8 @@ for module in "${modules_with_templates[@]}"; do
         hash_file=$(find "$template_dir" -maxdepth 1 -name '*_hashes.auto.sh' | head -n1)
         if [ -n "$hash_file" ]; then
             git add "$hash_file"
+            echo "❌ Hash file $hash_file was updated. Please add it to your commit and try again."
+            exit 1
         fi
     fi
 done

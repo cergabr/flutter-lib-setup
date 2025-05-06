@@ -62,7 +62,7 @@ EOF
 }
 
 # Function to validate if the input is a valid module name
-is_valid_module() {
+_is_valid_module() {
     local module_name="$1"
     local modules_dir="modules"
     
@@ -74,17 +74,18 @@ is_valid_module() {
 }
 
 # Main script logic
-if [ $# -eq 0 ]; then
+
+if [ $# -eq 0 ] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     echo "Error: No argument provided"
-    echo "Usage: <module_name> or <full_path>"a
+    echo "Usage: <module_name> or <full_path>"
     exit 1
 fi
 
 input="$1"
 
 # Check if input is a valid module name
-if is_valid_module "$input"; then
-    template_dir="modules/${input}"
+if _is_valid_module "$input"; then
+    template_dir="modules/${input}/templates"
 else
     # Assume it's a direct path
     template_dir="$input"

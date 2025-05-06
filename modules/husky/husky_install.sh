@@ -5,8 +5,8 @@ HUSKY_MODULE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 TEMPLATES_DIR="$HUSKY_MODULE_DIR/templates/.husky"
 
 # SHA256 hashes of template files
-#shellcheck source=husky_hashes.auto.sh
-source "${HUSKY_MODULE_DIR}/husky_hashes.auto.sh"
+#shellcheck source=templates/templates_hashes.auto.sh
+source "${HUSKY_MODULE_DIR}/templates/templates_hashes.auto.sh"
 
 # Function to attempt Husky activation
 husky::_activate_husky() {
